@@ -1,4 +1,4 @@
-@interface FISound : NSObject
+@interface FISound : NSObject <NSCopying>
 
 @property(assign, readonly) BOOL isPlaying;
 

@@ -6,10 +6,40 @@
 @interface FISound ()
 @property(strong) NSArray *voices;
 @property(assign) NSUInteger currentVoiceIndex;
+
+- (id) initWithSound:(FISound*) sound;
 @end
 
 @implementation FISound
 @dynamic isPlaying, loop, gain, pitch, duration;
+
+
+
+- (id) initWithSound:(FISound*) sound
+{
+  self = [super init];
+  _voices = @[];
+  if (self)
+  {
+    NSEnumerator *e = [sound.voices objectEnumerator];
+    id object;
+    while (object = [e nextObject])
+    {
+      FISoundSource *voice = [[FISoundSource alloc] initWithSampleBuffer:((FISoundSource*)object).sampleBuffer
+                                                                   error:nil];
+      if (!voice)
+        return nil;
+      _voices = [_voices arrayByAddingObject:voice];
+    }
+  }
+  return self;
+}
+
+-(id)copyWithZone:(NSZone *)zone
+{
+  // We'll ignore the zone for now
+  return [[FISound alloc] initWithSound:self];
+}
 
 #pragma mark Initialization
 
@@ -33,6 +63,11 @@
     }
 
     return self;
+}
+
+- (void) dealloc
+{
+  NSLog(@"FISound dealoc");
 }
 
 - (id) initWithPath: (NSString*) path error: (NSError**) error
