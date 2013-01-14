@@ -1,7 +1,7 @@
 #import "FISoundEngine.h"
 #import "FISoundContext.h"
 #import "FISoundDevice.h"
-#import "FISampleDecoder.h"
+#import "FIDecoder.h"
 #import "FISampleBuffer.h"
 #import "FIError.h"
 
@@ -29,7 +29,7 @@
     [_soundContext setCurrent:YES];
 
     self.decoders = [NSMutableArray array];
-    [self.decoders addObject:[[FISampleDecoder alloc] init]];
+    [self.decoders addObject:[[FIDecoder alloc] init]];
     return self;
 }
 

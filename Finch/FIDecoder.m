@@ -1,14 +1,14 @@
-#import "FISampleDecoder.h"
+#import "FIDecoder.h"
 #import "FISampleBuffer.h"
 #import "FIError.h"
 
-@implementation FISampleDecoder
+@implementation FIDecoder
 
 - (FISampleBuffer*) decodeAtPath: (NSString*) path error: (NSError**) error
 {
     // Read sample data
     AudioStreamBasicDescription format = {0};
-    NSData *sampleData = [self readSampleDataAtPath:path fileFormat:&format error:error];
+    NSData *sampleData = [self readDataAtPath:path fileFormat:&format error:error];
     if (!sampleData) {
         return nil;
     }
@@ -65,7 +65,7 @@
     return YES;
 }
 
-- (NSData*) readSampleDataAtPath: (NSString*) path fileFormat: (AudioStreamBasicDescription*) theOutputFormat error: (NSError**) error
+- (NSData*) readDataAtPath: (NSString*) path fileFormat: (AudioStreamBasicDescription*) theOutputFormat error: (NSError**) error
 {
     NSParameterAssert(theOutputFormat);
     NSParameterAssert(error);

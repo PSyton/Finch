@@ -1,5 +1,5 @@
 #import "FISound.h"
-#import "FISampleDecoder.h"
+#import "FIDecoder.h"
 #import "FISampleBuffer.h"
 #import "FISoundSource.h"
 #import "FISoundEngine.h"
