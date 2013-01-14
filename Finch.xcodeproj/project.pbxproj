@@ -166,6 +166,7 @@
 		0DF32BA3141A37250059033C /* FIError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FIError.h; path = Finch/FIError.h; sourceTree = "<group>"; };
 		0DFC9E55147FBC9800FC2066 /* FIError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FIError.m; path = Finch/FIError.m; sourceTree = "<group>"; };
 		0DFC9E67147FDD6000FC2066 /* Lib-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Lib-Prefix.pch"; path = "Finch/Lib-Prefix.pch"; sourceTree = "<group>"; };
+		5E52AD9416A43E9200DB8200 /* FIDecoderDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FIDecoderDelegate.h; path = Finch/FIDecoderDelegate.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -287,6 +288,7 @@
 				0D9CA6FF1695CE59007B522D /* FISoundEngine.m */,
 				0D1BA664141A45B6004A5A9F /* Tests-Prefix.pch */,
 				0DFC9E67147FDD6000FC2066 /* Lib-Prefix.pch */,
+				5E52AD9416A43E9200DB8200 /* FIDecoderDelegate.h */,
 			);
 			name = "High-Level Interface";
 			sourceTree = "<group>";

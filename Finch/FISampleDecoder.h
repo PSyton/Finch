@@ -1,7 +1,8 @@
+#import "FIDecoderDelegate.h"
 @class FISampleBuffer;
 
-@interface FISampleDecoder : NSObject
+@interface FISampleDecoder : NSObject <FIDecoderDelegate>
 
-+ (FISampleBuffer*) decodeSampleAtPath: (NSString*) path error: (NSError**) error;
+//+ (FISampleBuffer*) decodeSampleAtPath: (NSString*) path error: (NSError**) error;
 
 @end

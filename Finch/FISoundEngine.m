@@ -1,10 +1,14 @@
 #import "FISoundEngine.h"
 #import "FISoundContext.h"
 #import "FISoundDevice.h"
+#import "FISampleDecoder.h"
+#import "FISampleBuffer.h"
+#import "FIError.h"
 
 @interface FISoundEngine ()
 @property(strong) FISoundDevice *soundDevice;
 @property(strong) FISoundContext *soundContext;
+@property(strong) NSMutableArray *decoders;
 @end
 
 @implementation FISoundEngine
@@ -24,6 +28,8 @@
     [self setSoundBundle:[NSBundle bundleForClass:[self class]]];
     [_soundContext setCurrent:YES];
 
+    self.decoders = [NSMutableArray array];
+    [self.decoders addObject:[[FISampleDecoder alloc] init]];
     return self;
 }
 
@@ -42,6 +48,51 @@
     return sharedEngine;
 }
 
+#pragma mark Decoding
+
+- (FISampleBuffer*)decodeAtPath:(NSString *)path error:(NSError **)error
+{
+  FI_INIT_ERROR_IF_NULL(error);
+
+  FISampleBuffer *buffer = nil;
+  NSEnumerator *e = [self.decoders objectEnumerator];
+  id object;
+  while (object = [e nextObject])
+  {
+    if ([object respondsToSelector:@selector(decodeAtPath:error:)])
+      buffer = [object decodeAtPath:path error:error];
+    if (buffer || [*error code] == FIErrorFormatNotSupported)
+      break;
+  }
+  return nil;
+}
+
+- (BOOL) registerDecoder: (id <FIDecoderDelegate>) decoder
+{
+  if (!decoder)
+    return NO;
+  if (![self.decoders containsObject:decoder])
+  {
+    [self.decoders insertObject:decoder atIndex:0];
+    return YES;
+  }
+  return NO;
+}
+
+- (BOOL) unregisterDecoder: (id <FIDecoderDelegate>) decoder
+{
+  if (!decoder)
+    return NO;
+  if ([self.decoders containsObject:decoder])
+  {
+    [self.decoders removeObject:decoder];
+    return YES;
+  }
+  return NO;
+}
+
+
+/*
 #pragma mark Sound Loading
 
 - (FISound*) soundNamed: (NSString*) soundName maxPolyphony: (NSUInteger) voices error: (NSError**) error
@@ -55,6 +106,7 @@
 {
     return [self soundNamed:soundName maxPolyphony:1 error:error];
 }
+*/
 
 #pragma mark Interruption Handling
 

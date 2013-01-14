@@ -13,7 +13,8 @@ enum {
     FIErrorCannotReadFile,
     FIErrorInvalidSampleFormat,
     FIErrorCannotAllocateMemory,
-    FIErrorCannotCreateSoundSource
+    FIErrorCannotCreateSoundSource,
+    FIErrorFormatNotSupported
 };
 
 @interface FIError : NSObject
