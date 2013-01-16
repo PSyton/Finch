@@ -1,10 +1,15 @@
 About
 =====
 
-Finch is a simple OpenAL-based sound effect player for iOS. The reasons for writing Finch instead of sticking with Apple’s `AVAudioPlayer` are described in my [question on Stack Overflow][so]. The goals are simple: (1) Play sound effects without much fuss, and (2) do not lag in the `play` method as `AVAudioPlayer` does. Finch is not meant to play background music. If you want
-to play background music, you can go with `AVAudioPlayer`. Finch will play the sound effects over the background music just fine.
+Finch is a simple OpenAL-based sound effect player for iOS. The reasons for writing Finch instead of sticking with Apple’s `AVAudioPlayer` are described in my [question on Stack Overflow][so]. The goals are simple:
+1. Play sound effects without much fuss.
+2. do not lag in the `play` method as `AVAudioPlayer` does.
 
 [so]: http://stackoverflow.com/questions/986983
+
+Now Finch can be used as sound effect player as well as background music player.
+This version of Fich support all audio formats supported by Apple’s `AVAudioPlayer`. But Finch now has support for decoder extensions.
+
 
 Installing
 ==========
@@ -16,6 +21,24 @@ If you are unsure about the instructions above, please see the [Xcode 4 static l
 [headers]: http://stackoverflow.com/questions/6289999
 [tutorial]: http://blog.carbonfive.com/2011/04/04/using-open-source-static-libraries-in-xcode-4/#using_a_static_library
 
+
+API changes
+===========
+
+Some API changed in Finch.
+
+* Added streaming support.
+* Added external decoder support.
+* Added listener and sound source positions.
+* Removed 'soundNamed' methods from FISoundEngine.
+* Removed 'FISound' polyphony support. I think, the old implementation was strange, not usable and not controlled. For example if you start play sound twice you can't stop it first voice at all. For play many instance of same sounds in same time you can use cloning sound now. For clone existing sound simple call [<soundInstance> copy] and you can play it.
+
+
+TODO
+====
+
+Finish this page with write about new features.
+
 Using
 =====
 
@@ -24,7 +47,7 @@ After you link against the library and import the headers you may start using th
     #import "FISoundEngine.h"
 
     NSError *error = nil;
-    FISoundEngine *engine = [FISoundEngine sharedEngine];
+    FISoundEngine *engine = [FISoundEngine sharedEngine]; 
     FISound *sound = [engine soundNamed:@"finch.wav" maxPolyphony:4 error:&error];
     if (!sound) {
         NSLog(@"Failed to load sound: %@", error);
@@ -46,7 +69,7 @@ If you wish to overlay multiple instances of the sound, set the `maxPolyphony` a
       rapid fire!
         rapid fire!
 
-And please note that Finch does not yet support compressed audio. You should be safe with 8-bit or 16-bit mono or stereo little-endian WAV files sampled at 44.1 kHz. There is a demo target inside the project, take a look at it to see more.
+There is a demo target inside the project, take a look at it to see more.
 
 Audio Interruption Handling
 ===========================
@@ -78,7 +101,8 @@ The code is offered under the [MIT License][license]. Essentially you can do wit
 Authors & Support
 =================
 
-Code by Tomáš Znamenáček, <tomas.znamenacek@gmail.com>.  
+Code by Tomáš Znamenáček, <tomas.znamenacek@gmail.com>.
+Refactored and improved by Pavel Sysolyatin, <psytonx@gmail.com>.
 The Finch image is © [asukawashere].
 
 If you have a question that could possibly be of interest to other people, you can ask it on [Stack Overflow][questions] and send me a link to your question. It’s better than discussing it in private, because you can get answers from other people and once the question has been answered, other people can benefit

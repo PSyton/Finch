@@ -1,6 +1,7 @@
 #import "Application.h"
 #import "Controller.h"
 #import "FISoundEngine.h"
+#import "FISound.h"
 
 @interface Application ()
 @property(strong) FISoundEngine *soundEngine;
@@ -14,7 +15,7 @@
 - (void) applicationDidFinishLaunching: (UIApplication*) application
 {
     _soundEngine = [FISoundEngine sharedEngine];
-    [_controller setSound:[_soundEngine soundNamed:@"finch.wav" maxPolyphony:4 error:NULL]];
+    [_controller setSound:[FISound soundWithPath:@"finch.m4a" enableStreaming:NO error:NULL]];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
         selector:@selector(handleAudioSessionInterruption:)

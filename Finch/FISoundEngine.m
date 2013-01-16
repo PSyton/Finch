@@ -1,36 +1,41 @@
 #import "FISoundEngine.h"
 #import "FISoundContext.h"
 #import "FISoundDevice.h"
-#import "FIDecoder.h"
+#import "FIDefaultStreamFactory.h"
 #import "FISampleBuffer.h"
 #import "FIError.h"
+#import "FIVector.h"
 
 @interface FISoundEngine ()
 @property(strong) FISoundDevice *soundDevice;
 @property(strong) FISoundContext *soundContext;
-@property(strong) NSMutableArray *decoders;
+@property(strong) NSMutableArray *factory;
 @end
 
 @implementation FISoundEngine
 
+@dynamic listenerPosition;
+
 #pragma mark Initialization
 
-- (id) init
+- (id)init
 {
-    self = [super init];
+  self = [super init];
 
-    _soundDevice = [FISoundDevice defaultSoundDevice];
-    _soundContext = [FISoundContext contextForDevice:_soundDevice error:NULL];
-    if (!_soundContext) {
-        return nil;
-    }
+  _soundDevice = [FISoundDevice defaultSoundDevice];
+  _soundContext = [FISoundContext contextForDevice:_soundDevice error:NULL];
+  if (!_soundContext) {
+      return nil;
+  }
 
-    [self setSoundBundle:[NSBundle bundleForClass:[self class]]];
-    [_soundContext setCurrent:YES];
+  [self setSoundBundle:[NSBundle bundleForClass:[self class]]];
+  [_soundContext setCurrent:YES];
 
-    self.decoders = [NSMutableArray array];
-    [self.decoders addObject:[[FIDecoder alloc] init]];
-    return self;
+  [self setListenerPosition: [FIVector vector]];
+
+  self.factory = [NSMutableArray array];
+  [self.factory addObject:[[FIDefaultStreamFactory alloc] init]];
+  return self;
 }
 
 - (void) dealloc
@@ -40,73 +45,74 @@
 
 + (id) sharedEngine
 {
-    static dispatch_once_t once;
-    static FISoundEngine *sharedEngine = nil;
-    dispatch_once(&once, ^{
-        sharedEngine = [[self alloc] init];
-    });
-    return sharedEngine;
+  static dispatch_once_t once;
+  static FISoundEngine *sharedEngine = nil;
+  dispatch_once(&once, ^{
+    sharedEngine = [[self alloc] init];
+  });
+  return sharedEngine;
 }
 
 #pragma mark Decoding
 
-- (FISampleBuffer*)decodeAtPath:(NSString *)path error:(NSError **)error
+-(id<FIStreamProtocol>)createStreamWithPath:(NSString*)path error:(NSError**)error
 {
-  FI_INIT_ERROR_IF_NULL(error);
+  NSParameterAssert(error);
 
-  FISampleBuffer *buffer = nil;
-  NSEnumerator *e = [self.decoders objectEnumerator];
+  id<FIStreamProtocol> stream = nil;
+  NSEnumerator *e = [self.factory objectEnumerator];
   id object;
-  while (object = [e nextObject])
-  {
-    if ([object respondsToSelector:@selector(decodeAtPath:error:)])
-      buffer = [object decodeAtPath:path error:error];
-    if (buffer || [*error code] == FIErrorFormatNotSupported)
+  while (object = [e nextObject]) {
+    if ([object respondsToSelector:@selector(createStreamWithPath:error:)]) {
+      stream = [object createStreamWithPath:path error:error];
+    }
+    if (stream) {
+      return stream;
+    }
+    if ([*error code] != FIErrorFormatNotSupported) {
       break;
+    }
   }
   return nil;
 }
 
-- (BOOL) registerDecoder: (id <FIDecoderDelegate>) decoder
+-(BOOL)registerStreamFactory:(id <FIStreamFactoryDelegate>)factory
 {
-  if (!decoder)
+  if (!factory) {
     return NO;
-  if (![self.decoders containsObject:decoder])
-  {
-    [self.decoders insertObject:decoder atIndex:0];
+  }
+  if (![self.factory containsObject:factory]) {
+    [self.factory insertObject:factory atIndex:0];
     return YES;
   }
   return NO;
 }
 
-- (BOOL) unregisterDecoder: (id <FIDecoderDelegate>) decoder
+-(BOOL)unregisterStreamFactory:(id <FIStreamFactoryDelegate>)factory
 {
-  if (!decoder)
+  if (!factory) {
     return NO;
-  if ([self.decoders containsObject:decoder])
-  {
-    [self.decoders removeObject:decoder];
+  }
+  if ([self.factory containsObject:factory]) {
+    [self.factory removeObject:factory];
     return YES;
   }
   return NO;
 }
 
-
-/*
-#pragma mark Sound Loading
-
-- (FISound*) soundNamed: (NSString*) soundName maxPolyphony: (NSUInteger) voices error: (NSError**) error
+-(FIVector*)listenerPosition
 {
-    return [[FISound alloc]
-        initWithPath:[_soundBundle pathForResource:soundName ofType:nil]
-        maxPolyphony:voices error:error];
+  ALfloat x;
+  ALfloat y;
+  ALfloat z;
+  alGetListener3f(AL_POSITION, &x, &y, &z);
+  return [FIVector vectorWithX:x Y:y Z:z];
 }
 
-- (FISound*) soundNamed: (NSString*) soundName error: (NSError**) error
+-(void)setListenerPosition:(FIVector *)listenerPosition
 {
-    return [self soundNamed:soundName maxPolyphony:1 error:error];
+  alListener3f(AL_POSITION, listenerPosition.x, listenerPosition.y, listenerPosition.z);
 }
-*/
 
 #pragma mark Interruption Handling
 

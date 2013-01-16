@@ -1,37 +1,23 @@
 #import "FISound.h"
-#import "FIDecoder.h"
+#import "FIDefaultStreamFactory.h"
 #import "FISampleBuffer.h"
 #import "FISoundSource.h"
 #import "FISoundEngine.h"
 
 @interface FISound ()
-@property(strong) NSArray *voices;
-@property(assign) NSUInteger currentVoiceIndex;
-
+@property(strong) FISoundSource* source;
 - (id) initWithSound:(FISound*) sound;
 @end
 
 @implementation FISound
-@dynamic isPlaying, loop, gain, pitch, duration;
+@dynamic isPlaying, loop, gain, pitch, duration, path;
 
-
-
-- (id) initWithSound:(FISound*) sound
+-(id)initWithSound:(FISound*)sound
 {
   self = [super init];
-  _voices = @[];
-  if (self)
-  {
-    NSEnumerator *e = [sound.voices objectEnumerator];
-    id object;
-    while (object = [e nextObject])
-    {
-      FISoundSource *voice = [[FISoundSource alloc] initWithSampleBuffer:((FISoundSource*)object).sampleBuffer
-                                                                   error:nil];
-      if (!voice)
-        return nil;
-      _voices = [_voices arrayByAddingObject:voice];
-    }
+  _source = [sound.source copy];
+  if (!_source) {
+    return nil;
   }
   return self;
 }
@@ -42,93 +28,86 @@
   return [[FISound alloc] initWithSound:self];
 }
 
-+ (id) soundWithPath: (NSString*) path maxPolyphony: (NSUInteger) voices error: (NSError**) error
+-(NSString*)path
 {
-  return [[FISound alloc] initWithPath:path maxPolyphony:voices error:error];
+  if (_source)
+    return [_source path];
+  return [NSString string];
 }
 
-+ (id) soundWithPath: (NSString*) path error: (NSError**) error
++(id)soundWithPath:(NSString*)path enableStreaming:(BOOL)streaming error:(NSError**)error;
 {
-  return [[FISound alloc] initWithPath:path maxPolyphony:1 error:error];
+  NSRange range = [path rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"/"]];
+  if (NSNotFound == range.location || range.location > 0) {
+    return [self soundWithName:path enableStreaming:streaming error:error];
+  }
+  return [[FISound alloc] initWithPath:path enableStreaming:streaming error:error];
 }
 
++(id)soundWithName:(NSString*)name enableStreaming:(BOOL)streaming error:(NSError**)error
+{
+  NSString* path = [[[FISoundEngine sharedEngine] soundBundle] pathForResource:name ofType:nil];
+  if (!path) {
+    return nil;
+  }
+  return [[FISound alloc] initWithPath:path enableStreaming:streaming error:error];
+}
 
 #pragma mark Initialization
-
-- (id) initWithPath: (NSString*) path maxPolyphony: (NSUInteger) maxPolyphony error: (NSError**) error
+-(id)initWithPath:(NSString*)path enableStreaming:(BOOL)streaming error: (NSError**)error;
 {
-    self = [super init];
-    _voices = @[];
-  
-    if (!maxPolyphony) {
-      return nil;
-    }
-
-    FISampleBuffer *buffer = nil;
-
-    FISoundEngine* engine = [FISoundEngine sharedEngine];
-    if (engine) {
-       buffer = [engine decodeAtPath:path error:error];
-    }
-
-    if (!buffer) {
-        return nil;
-    }
-
-    for (int i=0; i<maxPolyphony; i++) {
-        FISoundSource *voice = [[FISoundSource alloc] initWithSampleBuffer:buffer error:error];
-        if (voice) {
-            _voices = [_voices arrayByAddingObject:voice];
-        } else {
-            return nil;
-        }
-    }
-
-    return self;
+  self = [super init];
+  _source = [FISoundSource sourceWithPath:path enableStreaming:streaming error:error];
+  if (!_source) {
+    return nil;
+  }
+  return self;
 }
 
-- (void) dealloc
+-(void)dealloc
 {
+  [self stop];
 }
 
-- (id) initWithPath: (NSString*) path error: (NSError**) error
+-(void)play
 {
-    return [self initWithPath:path maxPolyphony:1 error:error];
+  if (_source) {
+    [_source play];
+  }
 }
 
-#pragma mark Playback
-
-- (void) play
+-(void)stop
 {
-    _currentVoiceIndex = (_currentVoiceIndex + 1) % [_voices count];
-    [(FISoundSource*) [_voices objectAtIndex:_currentVoiceIndex] play];
+  if (_source) {
+    [_source stop];
+  }
 }
 
-- (void) stop
+-(void)update
 {
-    for (FISound *voice in _voices) {
-        [voice stop];
-    }
+  if (_source) {
+    [_source update];
+  }
+}
+
+-(void)pause
+{
+  if (_source) {
+    [_source pause];
+  }
 }
 
 #pragma mark Sound Properties
-
-- (NSTimeInterval) duration
+-(void)forwardInvocation:(NSInvocation*)invocation
 {
-    return [[[_voices lastObject] sampleBuffer] duration];
+  [invocation invokeWithTarget:_source];
 }
 
-- (void) forwardInvocation: (NSInvocation*) invocation
-{
-    for (FISoundSource *voice in _voices)
-        [invocation invokeWithTarget:voice];
-}
 
-- (NSMethodSignature*) methodSignatureForSelector: (SEL) selector
+-(NSMethodSignature*)methodSignatureForSelector:(SEL)selector
 {
-    NSMethodSignature *our = [super methodSignatureForSelector:selector];
-    NSMethodSignature *voiced = [[_voices lastObject] methodSignatureForSelector:selector];
-    return our ? our : voiced;
+  NSMethodSignature *our = [super methodSignatureForSelector:selector];
+  return our ? our : [_source methodSignatureForSelector:selector];
 }
 
 @end

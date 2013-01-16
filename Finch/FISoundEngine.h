@@ -1,16 +1,17 @@
 #import "FISound.h"
-#import "FIDecoderDelegate.h"
+#import "FIStreamFactoryDelegate.h"
 
-@interface FISoundEngine : NSObject <FIDecoderDelegate>
+@class FIVector;
+
+@interface FISoundEngine : NSObject <FIStreamFactoryDelegate>
 
 @property(strong) NSBundle *soundBundle;
 @property(assign, nonatomic, getter = isSuspended) BOOL suspended;
+@property(copy, nonatomic) FIVector* listenerPosition;
++(id)sharedEngine;
 
-+ (id) sharedEngine;
+-(id<FIStreamProtocol>)createStreamWithPath:(NSString*)path error:(NSError**)error;
 
-//- (FISound*) soundNamed: (NSString*) soundName maxPolyphony: (NSUInteger) voices error: (NSError**) error;
-//- (FISound*) soundNamed: (NSString*) soundName error: (NSError**) error;
-
-- (BOOL) registerDecoder: (id <FIDecoderDelegate>) decoder;
-- (BOOL) unregisterDecoder: (id <FIDecoderDelegate>) decoder;
+-(BOOL)registerStreamFactory: (id <FIStreamFactoryDelegate>)factory;
+-(BOOL)unregisterStreamFactory: (id <FIStreamFactoryDelegate>)factory;
 @end

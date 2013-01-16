@@ -34,9 +34,8 @@
 		0D47D26E169480D500720C56 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D2AA9A7141752A200F4071B /* AVFoundation.framework */; };
 		0D47D2711694848E00720C56 /* FISoundContextTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D47D2701694848E00720C56 /* FISoundContextTests.m */; };
 		0D74728E165AA8230079C0FF /* libFinch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D2AA93E14174FA000F4071B /* libFinch.a */; };
-		0D9CA6E81695735A007B522D /* FIDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 0D9CA6E61695735A007B522D /* FIDecoder.h */; };
-		0D9CA6E91695735A007B522D /* FIDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D9CA6E71695735A007B522D /* FIDecoder.m */; };
-		0D9CA6ED169573C7007B522D /* FISampleDecoderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D9CA6EC169573C7007B522D /* FISampleDecoderTests.m */; };
+		0D9CA6E81695735A007B522D /* FIDefaultStreamFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 0D9CA6E61695735A007B522D /* FIDefaultStreamFactory.h */; };
+		0D9CA6E91695735A007B522D /* FIDefaultStreamFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D9CA6E71695735A007B522D /* FIDefaultStreamFactory.m */; };
 		0D9CA6F016958028007B522D /* FISampleFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = 0D9CA6EE16958028007B522D /* FISampleFormat.h */; };
 		0D9CA6F116958028007B522D /* FISampleFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D9CA6EF16958028007B522D /* FISampleFormat.m */; };
 		0D9CA6F81695896E007B522D /* FISoundSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 0D9CA6F61695896E007B522D /* FISoundSource.h */; };
@@ -76,11 +75,27 @@
 		0DC3BFE51698165E00B7C4F2 /* stereo16bit.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0DC3BFDD1698165E00B7C4F2 /* stereo16bit.wav */; };
 		0DC3BFE81698189E00B7C4F2 /* FISoundTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DC3BFE71698189D00B7C4F2 /* FISoundTests.m */; };
 		0DC3BFEA16981DD700B7C4F2 /* duration.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0DC3BFE916981DD700B7C4F2 /* duration.wav */; };
-		0DC3BFED1698214900B7C4F2 /* FISoundSourceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DC3BFEC1698214800B7C4F2 /* FISoundSourceTests.m */; };
 		0DCA26E116998170000B20EB /* finch.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0DCA26E016998170000B20EB /* finch.wav */; };
 		0DF32BA4141A37250059033C /* FIError.h in Headers */ = {isa = PBXBuildFile; fileRef = 0DF32BA3141A37250059033C /* FIError.h */; };
 		0DFC9E56147FBC9800FC2066 /* FIError.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DFC9E55147FBC9800FC2066 /* FIError.m */; };
 		0DFC9E68147FDD6100FC2066 /* Lib-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 0DFC9E67147FDD6000FC2066 /* Lib-Prefix.pch */; };
+		5EC09EEB16A6E96A00AF66D3 /* FIStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 5EC09EE916A6E96A00AF66D3 /* FIStream.h */; };
+		5EC09EEC16A6E96A00AF66D3 /* FIStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EC09EEA16A6E96A00AF66D3 /* FIStream.m */; };
+		5EC75A5416AB8C170018DA70 /* FIDefaultStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 5EC75A5216AB8C170018DA70 /* FIDefaultStream.h */; };
+		5EC75A5516AB8C170018DA70 /* FIDefaultStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EC75A5316AB8C170018DA70 /* FIDefaultStream.m */; };
+		5EC75A7116ABC5710018DA70 /* FIVector.h in Headers */ = {isa = PBXBuildFile; fileRef = 5EC75A6F16ABC5710018DA70 /* FIVector.h */; };
+		5EC75A7216ABC5710018DA70 /* FIVector.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EC75A7016ABC5710018DA70 /* FIVector.m */; };
+		5ECC49CF16AA770F0001DD25 /* mono8bit.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5ECC49CA16AA71AC0001DD25 /* mono8bit.m4a */; };
+		5ECC49D016AA770F0001DD25 /* mono16bit.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5ECC49CB16AA71AC0001DD25 /* mono16bit.m4a */; };
+		5ECC49D116AA770F0001DD25 /* stereo8bit.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5ECC49CC16AA71AC0001DD25 /* stereo8bit.m4a */; };
+		5ECC49D216AA770F0001DD25 /* stereo16bit.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5ECC49CD16AA71AC0001DD25 /* stereo16bit.m4a */; };
+		5ECC49D316AA773B0001DD25 /* mono8bit.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5ECC49CA16AA71AC0001DD25 /* mono8bit.m4a */; };
+		5ECC49D416AA773B0001DD25 /* mono16bit.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5ECC49CB16AA71AC0001DD25 /* mono16bit.m4a */; };
+		5ECC49D516AA773B0001DD25 /* stereo8bit.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5ECC49CC16AA71AC0001DD25 /* stereo8bit.m4a */; };
+		5ECC49D616AA773B0001DD25 /* stereo16bit.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5ECC49CD16AA71AC0001DD25 /* stereo16bit.m4a */; };
+		5ECC49D716AA773B0001DD25 /* duration.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0DC3BFE916981DD700B7C4F2 /* duration.wav */; };
+		5ECC49DF16AAA3320001DD25 /* FIStreamTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5ECC49DE16AAA3320001DD25 /* FIStreamTests.m */; };
+		5ECC49ED16AAC6F90001DD25 /* finch.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5ECC49EA16AAC3F70001DD25 /* finch.m4a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -124,9 +139,8 @@
 		0D2AA9A9141752BE00F4071B /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		0D2AA9AB141752D800F4071B /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		0D47D2701694848E00720C56 /* FISoundContextTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FISoundContextTests.m; path = Finch/FISoundContextTests.m; sourceTree = "<group>"; };
-		0D9CA6E61695735A007B522D /* FIDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FIDecoder.h; path = Finch/FIDecoder.h; sourceTree = "<group>"; };
-		0D9CA6E71695735A007B522D /* FIDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FIDecoder.m; path = Finch/FIDecoder.m; sourceTree = "<group>"; };
-		0D9CA6EC169573C7007B522D /* FISampleDecoderTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FISampleDecoderTests.m; path = Finch/FISampleDecoderTests.m; sourceTree = "<group>"; };
+		0D9CA6E61695735A007B522D /* FIDefaultStreamFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FIDefaultStreamFactory.h; path = Finch/FIDefaultStreamFactory.h; sourceTree = "<group>"; };
+		0D9CA6E71695735A007B522D /* FIDefaultStreamFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FIDefaultStreamFactory.m; path = Finch/FIDefaultStreamFactory.m; sourceTree = "<group>"; };
 		0D9CA6EE16958028007B522D /* FISampleFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FISampleFormat.h; path = Finch/FISampleFormat.h; sourceTree = "<group>"; };
 		0D9CA6EF16958028007B522D /* FISampleFormat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FISampleFormat.m; path = Finch/FISampleFormat.m; sourceTree = "<group>"; };
 		0D9CA6F61695896E007B522D /* FISoundSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FISoundSource.h; path = Finch/FISoundSource.h; sourceTree = "<group>"; };
@@ -160,13 +174,23 @@
 		0DC3BFDD1698165E00B7C4F2 /* stereo16bit.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = stereo16bit.wav; path = Resources/stereo16bit.wav; sourceTree = SOURCE_ROOT; };
 		0DC3BFE71698189D00B7C4F2 /* FISoundTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FISoundTests.m; path = Finch/FISoundTests.m; sourceTree = "<group>"; };
 		0DC3BFE916981DD700B7C4F2 /* duration.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = duration.wav; path = Resources/duration.wav; sourceTree = SOURCE_ROOT; };
-		0DC3BFEB1698214800B7C4F2 /* FISoundSourceTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FISoundSourceTests.h; path = Finch/FISoundSourceTests.h; sourceTree = "<group>"; };
-		0DC3BFEC1698214800B7C4F2 /* FISoundSourceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FISoundSourceTests.m; path = Finch/FISoundSourceTests.m; sourceTree = "<group>"; };
 		0DCA26E016998170000B20EB /* finch.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = finch.wav; path = Demo/finch.wav; sourceTree = SOURCE_ROOT; };
 		0DF32BA3141A37250059033C /* FIError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FIError.h; path = Finch/FIError.h; sourceTree = "<group>"; };
 		0DFC9E55147FBC9800FC2066 /* FIError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FIError.m; path = Finch/FIError.m; sourceTree = "<group>"; };
 		0DFC9E67147FDD6000FC2066 /* Lib-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Lib-Prefix.pch"; path = "Finch/Lib-Prefix.pch"; sourceTree = "<group>"; };
-		5E52AD9416A43E9200DB8200 /* FIDecoderDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FIDecoderDelegate.h; path = Finch/FIDecoderDelegate.h; sourceTree = "<group>"; };
+		5E52AD9416A43E9200DB8200 /* FIStreamFactoryDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FIStreamFactoryDelegate.h; path = Finch/FIStreamFactoryDelegate.h; sourceTree = "<group>"; };
+		5EC09EE916A6E96A00AF66D3 /* FIStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FIStream.h; path = Finch/FIStream.h; sourceTree = "<group>"; };
+		5EC09EEA16A6E96A00AF66D3 /* FIStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FIStream.m; path = Finch/FIStream.m; sourceTree = "<group>"; };
+		5EC75A5216AB8C170018DA70 /* FIDefaultStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FIDefaultStream.h; path = Finch/FIDefaultStream.h; sourceTree = "<group>"; };
+		5EC75A5316AB8C170018DA70 /* FIDefaultStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FIDefaultStream.m; path = Finch/FIDefaultStream.m; sourceTree = "<group>"; };
+		5EC75A6F16ABC5710018DA70 /* FIVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FIVector.h; path = Finch/FIVector.h; sourceTree = "<group>"; };
+		5EC75A7016ABC5710018DA70 /* FIVector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FIVector.m; path = Finch/FIVector.m; sourceTree = "<group>"; };
+		5ECC49CA16AA71AC0001DD25 /* mono8bit.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = mono8bit.m4a; path = Resources/mono8bit.m4a; sourceTree = SOURCE_ROOT; };
+		5ECC49CB16AA71AC0001DD25 /* mono16bit.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = mono16bit.m4a; path = Resources/mono16bit.m4a; sourceTree = SOURCE_ROOT; };
+		5ECC49CC16AA71AC0001DD25 /* stereo8bit.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = stereo8bit.m4a; path = Resources/stereo8bit.m4a; sourceTree = SOURCE_ROOT; };
+		5ECC49CD16AA71AC0001DD25 /* stereo16bit.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = stereo16bit.m4a; path = Resources/stereo16bit.m4a; sourceTree = SOURCE_ROOT; };
+		5ECC49DE16AAA3320001DD25 /* FIStreamTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FIStreamTests.m; path = Finch/FIStreamTests.m; sourceTree = "<group>"; };
+		5ECC49EA16AAC3F70001DD25 /* finch.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = finch.m4a; path = Demo/finch.m4a; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -263,6 +287,7 @@
 		0D2AA978141750F800F4071B /* Demo */ = {
 			isa = PBXGroup;
 			children = (
+				5ECC49EC16AAC4070001DD25 /* sounds */,
 				0D2AA98D1417515A00F4071B /* Application.h */,
 				0D2AA98E1417515A00F4071B /* Application.m */,
 				0D2AA98F1417515A00F4071B /* Controller.h */,
@@ -271,7 +296,6 @@
 				0D2AA9971417515A00F4071B /* Bootstrap.xib */,
 				0D2AA9951417515A00F4071B /* Info.plist */,
 				0D2AA9A61417526C00F4071B /* prefix.pch */,
-				0DCA26E016998170000B20EB /* finch.wav */,
 				0D2AA9961417515A00F4071B /* main.m */,
 			);
 			name = Demo;
@@ -288,7 +312,14 @@
 				0D9CA6FF1695CE59007B522D /* FISoundEngine.m */,
 				0D1BA664141A45B6004A5A9F /* Tests-Prefix.pch */,
 				0DFC9E67147FDD6000FC2066 /* Lib-Prefix.pch */,
-				5E52AD9416A43E9200DB8200 /* FIDecoderDelegate.h */,
+				5E52AD9416A43E9200DB8200 /* FIStreamFactoryDelegate.h */,
+				5EC09EE916A6E96A00AF66D3 /* FIStream.h */,
+				5EC09EEA16A6E96A00AF66D3 /* FIStream.m */,
+				5ECC49DE16AAA3320001DD25 /* FIStreamTests.m */,
+				5EC75A5216AB8C170018DA70 /* FIDefaultStream.h */,
+				5EC75A5316AB8C170018DA70 /* FIDefaultStream.m */,
+				5EC75A6F16ABC5710018DA70 /* FIVector.h */,
+				5EC75A7016ABC5710018DA70 /* FIVector.m */,
 			);
 			name = "High-Level Interface";
 			sourceTree = "<group>";
@@ -296,6 +327,10 @@
 		0D9CA7061695DEED007B522D /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				5ECC49CA16AA71AC0001DD25 /* mono8bit.m4a */,
+				5ECC49CB16AA71AC0001DD25 /* mono16bit.m4a */,
+				5ECC49CC16AA71AC0001DD25 /* stereo8bit.m4a */,
+				5ECC49CD16AA71AC0001DD25 /* stereo16bit.m4a */,
 				0DC3BFE916981DD700B7C4F2 /* duration.wav */,
 				0DC3BFDA1698165E00B7C4F2 /* mono8bit.wav */,
 				0DC3BFDB1698165E00B7C4F2 /* mono16bit.wav */,
@@ -329,13 +364,10 @@
 				0DAF0E871694223100612EED /* FISampleBuffer.h */,
 				0DAF0E881694223100612EED /* FISampleBuffer.m */,
 				0DAF0E8C1694254000612EED /* FISampleBufferTests.m */,
-				0D9CA6E61695735A007B522D /* FIDecoder.h */,
-				0D9CA6E71695735A007B522D /* FIDecoder.m */,
-				0D9CA6EC169573C7007B522D /* FISampleDecoderTests.m */,
+				0D9CA6E61695735A007B522D /* FIDefaultStreamFactory.h */,
+				0D9CA6E71695735A007B522D /* FIDefaultStreamFactory.m */,
 				0D9CA6F61695896E007B522D /* FISoundSource.h */,
 				0D9CA6F71695896E007B522D /* FISoundSource.m */,
-				0DC3BFEB1698214800B7C4F2 /* FISoundSourceTests.h */,
-				0DC3BFEC1698214800B7C4F2 /* FISoundSourceTests.m */,
 			);
 			name = Plumbing;
 			sourceTree = "<group>";
@@ -353,6 +385,15 @@
 			path = "Finch Test Suite";
 			sourceTree = "<group>";
 		};
+		5ECC49EC16AAC4070001DD25 /* sounds */ = {
+			isa = PBXGroup;
+			children = (
+				0DCA26E016998170000B20EB /* finch.wav */,
+				5ECC49EA16AAC3F70001DD25 /* finch.m4a */,
+			);
+			name = sounds;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -365,11 +406,14 @@
 				0DAF0E891694223100612EED /* FISampleBuffer.h in Headers */,
 				0DAF0E9616943E0800612EED /* FISoundContext.h in Headers */,
 				0DAF0E9A16943F5200612EED /* FISoundDevice.h in Headers */,
-				0D9CA6E81695735A007B522D /* FIDecoder.h in Headers */,
+				0D9CA6E81695735A007B522D /* FIDefaultStreamFactory.h in Headers */,
 				0D9CA6F016958028007B522D /* FISampleFormat.h in Headers */,
 				0D9CA6F81695896E007B522D /* FISoundSource.h in Headers */,
 				0D9CA6FC16958D46007B522D /* FISound.h in Headers */,
 				0D9CA7001695CE59007B522D /* FISoundEngine.h in Headers */,
+				5EC09EEB16A6E96A00AF66D3 /* FIStream.h in Headers */,
+				5EC75A5416AB8C170018DA70 /* FIDefaultStream.h in Headers */,
+				5EC75A7116ABC5710018DA70 /* FIVector.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -480,6 +524,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5ECC49CF16AA770F0001DD25 /* mono8bit.m4a in Resources */,
+				5ECC49D016AA770F0001DD25 /* mono16bit.m4a in Resources */,
+				5ECC49D116AA770F0001DD25 /* stereo8bit.m4a in Resources */,
+				5ECC49D216AA770F0001DD25 /* stereo16bit.m4a in Resources */,
 				0DC3BFDE1698165E00B7C4F2 /* mono8bit.wav in Resources */,
 				0DC3BFE01698165E00B7C4F2 /* mono16bit.wav in Resources */,
 				0DC3BFE21698165E00B7C4F2 /* stereo8bit.wav in Resources */,
@@ -492,6 +540,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5ECC49ED16AAC6F90001DD25 /* finch.m4a in Resources */,
 				0D2AA99C1417515A00F4071B /* Controller.xib in Resources */,
 				0D2AA99D1417515A00F4071B /* Default.png in Resources */,
 				0D2AA99E1417515A00F4071B /* Icon.png in Resources */,
@@ -507,6 +556,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5ECC49D316AA773B0001DD25 /* mono8bit.m4a in Resources */,
+				5ECC49D416AA773B0001DD25 /* mono16bit.m4a in Resources */,
+				5ECC49D516AA773B0001DD25 /* stereo8bit.m4a in Resources */,
+				5ECC49D616AA773B0001DD25 /* stereo16bit.m4a in Resources */,
+				5ECC49D716AA773B0001DD25 /* duration.wav in Resources */,
 				0D9CA7071695E16F007B522D /* Default-568h@2x.png in Resources */,
 				0D9CA7081695E16F007B522D /* Default@2x.png in Resources */,
 				0D9CA7091695E16F007B522D /* Default.png in Resources */,
@@ -545,10 +599,9 @@
 				0DAF0E8D1694254000612EED /* FISampleBufferTests.m in Sources */,
 				0DAF0EA0169479A900612EED /* FISoundDeviceTests.m in Sources */,
 				0D47D2711694848E00720C56 /* FISoundContextTests.m in Sources */,
-				0D9CA6ED169573C7007B522D /* FISampleDecoderTests.m in Sources */,
 				0DC3BFD91698153D00B7C4F2 /* FITestCase.m in Sources */,
 				0DC3BFE81698189E00B7C4F2 /* FISoundTests.m in Sources */,
-				0DC3BFED1698214900B7C4F2 /* FISoundSourceTests.m in Sources */,
+				5ECC49DF16AAA3320001DD25 /* FIStreamTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -560,11 +613,14 @@
 				0DAF0E8A1694223100612EED /* FISampleBuffer.m in Sources */,
 				0DAF0E9716943E0800612EED /* FISoundContext.m in Sources */,
 				0DAF0E9B16943F5200612EED /* FISoundDevice.m in Sources */,
-				0D9CA6E91695735A007B522D /* FIDecoder.m in Sources */,
+				0D9CA6E91695735A007B522D /* FIDefaultStreamFactory.m in Sources */,
 				0D9CA6F116958028007B522D /* FISampleFormat.m in Sources */,
 				0D9CA6F91695896E007B522D /* FISoundSource.m in Sources */,
 				0D9CA6FD16958D46007B522D /* FISound.m in Sources */,
 				0D9CA7011695CE59007B522D /* FISoundEngine.m in Sources */,
+				5EC09EEC16A6E96A00AF66D3 /* FIStream.m in Sources */,
+				5EC75A5516AB8C170018DA70 /* FIDefaultStream.m in Sources */,
+				5EC75A7216ABC5710018DA70 /* FIVector.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,3 +1,4 @@
+#import <OpenAL/al.h>
 #define FI_INIT_ERROR_IF_NULL(error) error = error ? error : &(NSError*){ nil }
 #define alClearError alGetError
 
@@ -14,7 +15,8 @@ enum {
     FIErrorInvalidSampleFormat,
     FIErrorCannotAllocateMemory,
     FIErrorCannotCreateSoundSource,
-    FIErrorFormatNotSupported
+    FIErrorFormatNotSupported,
+    FIUnknowError
 };
 
 @interface FIError : NSObject
