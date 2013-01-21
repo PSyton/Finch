@@ -2,13 +2,15 @@ About
 =====
 
 Finch is a simple OpenAL-based sound effect player for iOS. The reasons for writing Finch instead of sticking with Apple’s `AVAudioPlayer` are described in my [question on Stack Overflow][so]. The goals are simple:
+
 1. Play sound effects without much fuss.
 2. do not lag in the `play` method as `AVAudioPlayer` does.
 
 [so]: http://stackoverflow.com/questions/986983
 
 Now Finch can be used as sound effect player as well as background music player.
-This version of Fich support all audio formats supported by Apple’s `AVAudioPlayer`. But Finch now has support for decoder extensions.
+
+This version of Finch support all audio formats supported by Apple’s `AVAudioPlayer`. But Finch now has support for decoder extensions.
 
 
 Installing
