@@ -103,9 +103,9 @@ The code is offered under the [MIT License][license]. Essentially you can do wit
 Authors & Support
 =================
 
-Code by Tomáš Znamenáček, <tomas.znamenacek@gmail.com>.
-Refactored and improved by Pavel Sysolyatin, <psytonx@gmail.com>.
-The Finch image is © [asukawashere].
+- Code by Tomáš Znamenáček, <tomas.znamenacek@gmail.com>.
+- Refactored and improved by Pavel Sysolyatin, <psytonx@gmail.com>.
+- The Finch image is © [asukawashere].
 
 If you have a question that could possibly be of interest to other people, you can ask it on [Stack Overflow][questions] and send me a link to your question. It’s better than discussing it in private, because you can get answers from other people and once the question has been answered, other people can benefit
 from the answer, too.
