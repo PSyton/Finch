@@ -1,6 +1,4 @@
 #import <OpenAL/al.h>
-#define FI_INIT_ERROR_IF_NULL(error) error = error ? error : &(NSError*){ nil }
-#define alClearError alGetError
 
 extern NSString *const FIErrorDomain;
 extern NSString *const FIOpenALErrorCodeKey;
@@ -21,7 +19,6 @@ enum {
 
 @interface FIError : NSObject
 
-+ (id) errorWithMessage: (NSString*) message code: (NSUInteger) errorCode;
-+ (id) errorWithMessage: (NSString*) message code: (NSUInteger) errorCode OpenALCode: (ALenum) underlyingCode;
-
++(BOOL)setError:(NSError**)error withMessage:(NSString*)message withCode:(NSInteger)errorCode;
++(BOOL)alErrorWithMessage:(NSString*)message withCode:(NSInteger)errorCode withError: (NSError**)error;
 @end

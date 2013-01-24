@@ -25,58 +25,39 @@
   _sampleFormat = [FISampleBuffer OpenALSampleFormat:sampleFormat];
   _sampleRate = sampleRate;
 
-  FI_INIT_ERROR_IF_NULL(error);
-  ALenum status = ALC_NO_ERROR;
-
   if (!alcGetCurrentContext()) {
-    *error = [FIError errorWithMessage:@"No OpenAL context"
-                                  code:FIErrorNoActiveContext];
+    [FIError setError:error withMessage:@"No OpenAL context" withCode:FIErrorNoActiveContext];
     return nil;
   }
 
-  alClearError();
+  alGetError(); // Reset error code.
   alGenBuffers(1, &_handle);
-  status = alGetError();
-  if (status) {
-    *error = [FIError errorWithMessage:@"Failed to create OpenAL buffer"
-                                  code:FIErrorCannotCreateBuffer OpenALCode:status];
+  if ([FIError alErrorWithMessage:@"Failed to create OpenAL buffer"
+                            withCode:FIErrorCannotCreateBuffer withError:error]) {
     return nil;
   }
 
-  if (![self setData:data]) {
-    *error = [FIError errorWithMessage:@"Failed to pass sample data to OpenAL"
-                                  code:FIErrorCannotUploadData OpenALCode:status];
+  if ([self setData:data withError:error] == 0) {
     return nil;
   }
   return self;
 }
 
-- (BOOL)setData:(NSData*)data
+-(int)setData:(NSData*)data withError:(NSError**)error
 {
-  alClearError();
-  alBufferData(_handle, _sampleFormat, [data bytes], [data length], _sampleRate);
-  if (AL_NO_ERROR == alGetError()) {
-    _size = [data length];
-    return YES;
+  int size = [data length];
+  alGetError();
+  alBufferData(_handle, _sampleFormat, [data bytes], size, _sampleRate);
+  if ([FIError alErrorWithMessage:@"Failed to pass sample data to OpenAL buffer"
+                    withCode:FIErrorCannotUploadData
+                   withError:error]) {
+    size = 0;
   }
-  _size = 0;
-  return NO;
+  _size = size;
+  return size;
 }
 
-- (BOOL)queueToSource:(ALint)sourceId error:(NSError**)error
-{
-  ALenum status = ALC_NO_ERROR;
-  alSourceQueueBuffers(sourceId, 1, &_handle);
-  status = alGetError();
-  if (status) {
-    *error = [FIError errorWithMessage:@"Failed to queue buffer to OpenAl source"
-                                  code:FIErrorCannotCreateBuffer OpenALCode:status];
-    return false;
-  }
-  return true;
-}
-
-- (void) dealloc
+-(void)dealloc
 {
   if (_handle) {
     alDeleteBuffers(1, &_handle);

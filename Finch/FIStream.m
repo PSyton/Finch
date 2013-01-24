@@ -1,11 +1,3 @@
-//
-//  FIStream.m
-//  Finch
-//
-//  Created by Sysolyatin Pavel on 1/16/13.
-//
-//
-
 #import "FIStream.h"
 #import "FIError.h"
 
@@ -37,25 +29,24 @@
 
 +(BOOL)checkInternalFormatSanity:(AudioStreamBasicDescription*)format error:(NSError**)error
 {
-  NSParameterAssert(error);
   if (!TestAudioFormatNativeEndian((*format))) {
-    *error = [FIError
-              errorWithMessage:@"Invalid sample endianity, only native endianity supported"
-              code:FIErrorInvalidSampleFormat];
+    [FIError setError:error
+          withMessage:@"Invalid sample endianity, only native endianity supported"
+             withCode:FIErrorInvalidSampleFormat];
     return NO;
   }
 
   if (format->mChannelsPerFrame != 1 && format->mChannelsPerFrame != 2) {
-    *error = [FIError
-              errorWithMessage:@"Invalid number of sound channels, only mono and stereo supported"
-              code:FIErrorInvalidSampleFormat];
+    [FIError setError:error
+          withMessage:@"Invalid number of sound channels, only mono and stereo supported"
+             withCode:FIErrorInvalidSampleFormat];
     return NO;
   }
 
   if (format->mBitsPerChannel != 8 && format->mBitsPerChannel != 16) {
-    *error = [FIError
-              errorWithMessage:@"Invalid sample resolution, only 8-bit and 16-bit supported"
-              code:FIErrorInvalidSampleFormat];
+    [FIError setError:error
+          withMessage:@"Invalid sample resolution, only 8-bit and 16-bit supported"
+             withCode:FIErrorInvalidSampleFormat];
     return NO;
   }
   return YES;

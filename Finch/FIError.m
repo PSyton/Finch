@@ -5,19 +5,31 @@ NSString *const FIOpenALErrorCodeKey = @"FIOpenALErrorCodeKey";
 
 @implementation FIError
 
-+ (id) errorWithMessage: (NSString*) message code: (NSUInteger) errorCode
++(BOOL)setError:(NSError**)error withMessage:(NSString*)message withCode:(NSInteger)errorCode
 {
-    return [NSError errorWithDomain:FIErrorDomain code:errorCode userInfo:@{
-        NSLocalizedDescriptionKey : message
-    }];
+  if (error) {
+    *error = [NSError errorWithDomain:FIErrorDomain
+                                 code:errorCode
+                             userInfo:@{NSLocalizedDescriptionKey: message}];
+    return YES;
+  }
+  return NO;
 }
 
-+ (id) errorWithMessage: (NSString*) message code: (NSUInteger) errorCode OpenALCode: (ALenum) underlyingCode
++(BOOL)alErrorWithMessage:(NSString*)message withCode:(NSInteger)errorCode withError: (NSError**)error
 {
-    return [NSError errorWithDomain:FIErrorDomain code:errorCode userInfo:@{
-        NSLocalizedDescriptionKey : message,
-        FIOpenALErrorCodeKey : @(underlyingCode)
-    }];
+  ALenum status = alGetError();
+  if (AL_NO_ERROR != status)
+  {
+    if (error) {
+      *error = [NSError errorWithDomain:FIErrorDomain
+                                   code:errorCode
+                               userInfo:@{NSLocalizedDescriptionKey : message,
+                  FIOpenALErrorCodeKey : @(status)}];
+    }
+    return YES;
+  }
+  return NO;
 }
 
 @end

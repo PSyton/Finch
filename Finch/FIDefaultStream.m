@@ -20,10 +20,9 @@
 
 @implementation FIDefaultStream
 
--(id) initWithPath:(NSString*)filePath error:(NSError**)error
+-(id)initWithPath:(NSString*)filePath error:(NSError**)error
 {
   self = [super init];
-  NSParameterAssert(error);
   if (!filePath) {
     return nil;
   }
@@ -41,26 +40,23 @@
   NSURL *fileURL = [NSURL fileURLWithPath:_path];
   errcode = AudioFileOpenURL((__bridge CFURLRef) fileURL, kAudioFileReadPermission, 0, &_fileId);
   if (errcode) {
-    *error = [FIError
-              errorWithMessage:@"Can’t read file"
-              code:FIErrorCannotReadFile];
+    [FIError setError:error withMessage:@"Can’t read file"
+             withCode:FIErrorCannotReadFile];
     return nil;
   }
 
   errcode = AudioFileGetProperty(_fileId, kAudioFilePropertyDataFormat, &propertySize, &_outFormat);
   if (errcode) {
-    *error = [FIError
-              errorWithMessage:@"Can’t read file format"
-              code:FIErrorInvalidSampleFormat];
+    [FIError setError:error withMessage:@"Can’t read file format"
+             withCode:FIErrorInvalidSampleFormat];
     return nil;
   }
 
   if (_outFormat.mFormatID != kAudioFormatLinearPCM) {
     errcode = ExtAudioFileWrapAudioFileID(_fileId, false, &_extFileRef);
     if (errcode) {
-      *error = [FIError
-                errorWithMessage:@"Can’t read file"
-                code:FIErrorCannotReadFile];
+      [FIError setError:error withMessage:@"Can’t read file"
+               withCode:FIErrorCannotReadFile];
       return nil;
     }
 
@@ -68,34 +64,30 @@
     propertySize = sizeof(extFileFormat);
     errcode = ExtAudioFileGetProperty(_extFileRef, kExtAudioFileProperty_FileDataFormat, &propertySize, &extFileFormat);
     if (errcode) {
-      *error = [FIError
-                errorWithMessage:@"Can’t read file format"
-                code:FIErrorInvalidSampleFormat];
+      [FIError setError:error withMessage:@"Can’t read file format"
+               withCode:FIErrorInvalidSampleFormat];
       return nil;
     }
 
     if (extFileFormat.mChannelsPerFrame > 2) {
-      *error = [FIError
-                errorWithMessage:@"Too many channels (better than stereo!)."
-                code:FIErrorInvalidSampleFormat];
+      [FIError setError:error withMessage:@"Too many channels (better than stereo!)."
+               withCode:FIErrorInvalidSampleFormat];
     }
     _outFormat = [FIStream internalAudioInfoWithSampleRate:extFileFormat.mSampleRate
                                               withChannels:extFileFormat.mChannelsPerFrame];
 
     errcode = ExtAudioFileSetProperty(_extFileRef, kExtAudioFileProperty_ClientDataFormat, sizeof(_outFormat), &_outFormat);
     if (errcode) {
-      *error = [FIError
-                errorWithMessage:@"Couldn't set output format."
-                code:FIErrorInvalidSampleFormat];
+      [FIError setError:error withMessage:@"Couldn't set output format."
+               withCode:FIErrorInvalidSampleFormat];
       return nil;
     }
     SInt64 numFrames;
     propertySize = sizeof(numFrames);
     errcode = ExtAudioFileGetProperty(_extFileRef, kExtAudioFileProperty_FileLengthFrames, &propertySize, &numFrames);
     if (errcode) {
-      *error = [FIError
-                errorWithMessage:@"Couldn't get frames count."
-                code:FIErrorInvalidSampleFormat];
+      [FIError setError:error withMessage:@"Couldn't get frames count."
+               withCode:FIErrorInvalidSampleFormat];
       return nil;
     }
     _dataSize = numFrames * _outFormat.mBytesPerFrame;
@@ -105,9 +97,8 @@
     propertySize = sizeof(_dataSize);
     errcode = AudioFileGetProperty(_fileId, kAudioFilePropertyAudioDataByteCount, &propertySize, &_dataSize);
     if (errcode) {
-      *error = [FIError
-                errorWithMessage:@"Can’t read audio data byte count"
-                code:FIErrorInvalidSampleFormat];
+      [FIError setError:error withMessage:@"Can’t read audio data byte count"
+               withCode:FIErrorInvalidSampleFormat];
       return nil;
     }
   }

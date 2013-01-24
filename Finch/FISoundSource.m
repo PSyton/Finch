@@ -30,7 +30,7 @@
 
   self = [super init];
 
-  alClearError();
+  alGetError();
   alGenSources(1, &_handle);
   [self setLoop:[other loop]];
   ALenum status = alGetError();
@@ -38,9 +38,8 @@
     return nil;
   }
 
-  NSError* error = nil;
-
-  _stream = [[FISoundEngine sharedEngine] createStreamWithPath:other.stream.path error:&error];
+  _stream = [[FISoundEngine sharedEngine] createStreamWithPath:other.stream.path
+                                                         error:nil];
   if (!_stream) {
     return nil;
   }
@@ -57,7 +56,6 @@
     FISampleBuffer* buffer = (FISampleBuffer*)object;
     alSourcei(_handle, AL_BUFFER, [buffer handle]);
   }
-
   return self;
 }
 
@@ -80,17 +78,16 @@
   _pitch = 1;
   _gain = 1;
   _buffers = [NSMutableArray array];
-  alClearError();
+  alGetError();
   alGenSources(1, &_handle);
   [self setLoop:NO];
-  FI_INIT_ERROR_IF_NULL(error);
-  ALenum status = alGetError();
-  if (status) {
-    *error = [FIError
-              errorWithMessage:@"Failed to create OpenAL source"
-              code:FIErrorCannotCreateSoundSource OpenALCode:status];
+  
+  if ([FIError alErrorWithMessage:@"Failed to create OpenAL source"
+                            withCode:FIErrorCannotCreateSoundSource
+                           withError:error]) {
     return nil;
   }
+    
   _stream = [[FISoundEngine sharedEngine] createStreamWithPath:path error:error];
   if (!_stream) {
     return nil;
@@ -132,18 +129,17 @@
 
 - (BOOL)queueBuffer:(FISampleBuffer*)buffer error:(NSError**)error
 {
-  ALenum status = ALC_NO_ERROR;
+  alGetError();
   ALuint bufferId = [buffer handle];
   alSourceQueueBuffers(_handle, 1, &bufferId);
-  status = alGetError();
-  if (status) {
-    if (error) {
-      *error = [FIError errorWithMessage:@"Failed to queue buffer to OpenAl source"
-                                    code:FIErrorCannotCreateBuffer OpenALCode:status];
-    }
-    return false;
+
+  // \fixme Change Error code for this...
+  if ([FIError alErrorWithMessage:@"Failed to queue buffer to OpenAl source"
+                            withCode:FIErrorCannotCreateBuffer
+                           withError:error]) {
+    return NO;
   }
-  return true;
+  return YES;
 }
 
 -(FISampleBuffer*)findBuffer:(ALuint)bufferId
@@ -203,8 +199,12 @@
         break;
       }
     }
-    [buffer setData:data];
-    if (![self queueBuffer:buffer error:NULL]) {
+    if ([buffer setData:data withError:nil] == 0) {
+      NSLog(@"OpenAL: Can't fill buffer.");
+      return;
+    }
+
+    if (![self queueBuffer:buffer error:nil]) {
       NSLog(@"OpenAL: Can't queue buffer.");
       return;
     }
