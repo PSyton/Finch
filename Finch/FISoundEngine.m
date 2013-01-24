@@ -57,21 +57,23 @@
 
 -(id<FIStreamProtocol>)createStreamWithPath:(NSString*)path error:(NSError**)error
 {
-  NSParameterAssert(error);
-
+  NSError* localError = nil;
   id<FIStreamProtocol> stream = nil;
   NSEnumerator *e = [self.factory objectEnumerator];
   id object;
   while (object = [e nextObject]) {
     if ([object respondsToSelector:@selector(createStreamWithPath:error:)]) {
-      stream = [object createStreamWithPath:path error:error];
+      stream = [object createStreamWithPath:path error:&localError];
     }
     if (stream) {
       return stream;
     }
-    if ([*error code] != FIErrorFormatNotSupported) {
+    if (localError && ([localError code] != FIErrorFormatNotSupported)) {
       break;
     }
+  }
+  if (error) {
+    *error = localError;
   }
   return nil;
 }
