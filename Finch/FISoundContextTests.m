@@ -8,9 +8,9 @@
 
 - (void) testContextCreation
 {
-    FISoundDevice *device = [FISoundDevice defaultSoundDevice];
-    FISoundContext *context = [[FISoundContext alloc] initWithDevice:device error:NULL];
-    STAssertNotNil(context, @"Create a context");
+  FISoundDevice *device = [FISoundDevice defaultSoundDevice];
+  FISoundContext *context = [[FISoundContext alloc] initWithFIDevice:device error:nil];
+  STAssertNotNil(context, @"Create a context");
 }
 
 @end

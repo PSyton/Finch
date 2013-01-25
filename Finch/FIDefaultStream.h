@@ -16,5 +16,4 @@
 @property(assign, readonly) NSTimeInterval duration;
 
 @property(assign, readonly) UInt64 dataSize;
-@property(strong, readonly) NSString* path;
 @end

@@ -15,7 +15,6 @@
 @property (assign) AudioStreamBasicDescription outFormat;
 @property (assign) UInt64 dataSize;
 @property (assign) UInt64 bytesRead;
-@property(strong) NSString* path;
 @end
 
 @implementation FIDefaultStream
@@ -30,14 +29,13 @@
   _extFileRef = 0;
   _dataSize = 0;
   _bytesRead = 0;
-  _path = filePath;
 
   UInt32 propertySize = sizeof(_outFormat);
   memset(&_outFormat, 0, propertySize);
 
   OSStatus errcode = noErr;
 
-  NSURL *fileURL = [NSURL fileURLWithPath:_path];
+  NSURL *fileURL = [NSURL fileURLWithPath:filePath];
   errcode = AudioFileOpenURL((__bridge CFURLRef) fileURL, kAudioFileReadPermission, 0, &_fileId);
   if (errcode) {
     [FIError setError:error withMessage:@"Can’t read file"

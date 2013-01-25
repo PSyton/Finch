@@ -5,18 +5,20 @@
 #import "FISoundEngine.h"
 
 @interface FISound ()
-@property(strong) FISoundSource* source;
+@property(strong, retain) FISoundSource* source;
+
 - (id) initWithSound:(FISound*) sound;
 @end
 
 @implementation FISound
+@synthesize source;
 @dynamic isPlaying, loop, gain, pitch, duration, path;
 
 -(id)initWithSound:(FISound*)sound
 {
   self = [super init];
-  _source = [sound.source copy];
-  if (!_source) {
+  source = [sound.source copy];
+  if (!source) {
     return nil;
   }
   return self;
@@ -28,20 +30,13 @@
   return [[FISound alloc] initWithSound:self];
 }
 
--(NSString*)path
++(id)soundWithPath:(NSString*)aPath enableStreaming:(BOOL)streaming error:(NSError**)error;
 {
-  if (_source)
-    return [_source path];
-  return [NSString string];
-}
-
-+(id)soundWithPath:(NSString*)path enableStreaming:(BOOL)streaming error:(NSError**)error;
-{
-  NSRange range = [path rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"/"]];
+  NSRange range = [aPath rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"/"]];
   if (NSNotFound == range.location || range.location > 0) {
-    return [self soundWithName:path enableStreaming:streaming error:error];
+    return [self soundWithName:aPath enableStreaming:streaming error:error];
   }
-  return [[FISound alloc] initWithPath:path enableStreaming:streaming error:error];
+  return [[FISound alloc] initWithPath:aPath enableStreaming:streaming error:error];
 }
 
 +(id)soundWithName:(NSString*)name enableStreaming:(BOOL)streaming error:(NSError**)error
@@ -54,11 +49,11 @@
 }
 
 #pragma mark Initialization
--(id)initWithPath:(NSString*)path enableStreaming:(BOOL)streaming error: (NSError**)error;
+-(id)initWithPath:(NSString*)aPath enableStreaming:(BOOL)streaming error: (NSError**)error;
 {
   self = [super init];
-  _source = [FISoundSource sourceWithPath:path enableStreaming:streaming error:error];
-  if (!_source) {
+  source = [FISoundSource sourceWithPath:aPath enableStreaming:streaming error:error];
+  if (!source) {
     return nil;
   }
   return self;
@@ -67,47 +62,55 @@
 -(void)dealloc
 {
   [self stop];
+  source = nil;
 }
 
 -(void)play
 {
-  if (_source) {
-    [_source play];
+  if (source) {
+    [source play];
   }
 }
 
 -(void)stop
 {
-  if (_source) {
-    [_source stop];
+  if (source) {
+    [source stop];
   }
 }
 
 -(void)update
 {
-  if (_source) {
-    [_source update];
+  if (source) {
+    [source update];
   }
 }
 
 -(void)pause
 {
-  if (_source) {
-    [_source pause];
+  if (source) {
+    [source pause];
   }
+}
+
+-(NSString*)path
+{
+  if (source)
+    return [source path];
+  return nil;
 }
 
 #pragma mark Sound Properties
 -(void)forwardInvocation:(NSInvocation*)invocation
 {
-  [invocation invokeWithTarget:_source];
+  [invocation invokeWithTarget:source];
 }
 
 
 -(NSMethodSignature*)methodSignatureForSelector:(SEL)selector
 {
   NSMethodSignature *our = [super methodSignatureForSelector:selector];
-  return our ? our : [_source methodSignatureForSelector:selector];
+  return our ? our : [source methodSignatureForSelector:selector];
 }
 
 @end

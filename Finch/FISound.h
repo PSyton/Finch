@@ -7,7 +7,7 @@
 @property(assign, nonatomic) float gain;
 @property(assign, nonatomic) float pitch;
 @property(assign, readonly) NSTimeInterval duration;
-@property(strong, readonly) NSString* path;
+@property(assign, readonly) NSString* path;
 
 +(id)soundWithPath:(NSString*)path enableStreaming:(BOOL)streaming error:(NSError**)error;
 +(id)soundWithName:(NSString*)name enableStreaming:(BOOL)streaming error:(NSError**)error;

@@ -12,19 +12,21 @@
 @interface FISoundSource ()
 @property(assign) ALuint handle;
 @property(strong) NSMutableArray* buffers;
-@property(strong) id<FIStreamProtocol> stream;
+@property(strong, retain) id<FIStreamProtocol> stream;
+@property(strong, retain) NSString* path;
 @end
 
 @implementation FISoundSource
-@synthesize loop;
-@dynamic sampleRate, sampleFormat, bytesPerSample, duration, isPaused, isPlaying, isStream, position, path;
+@synthesize loop, stream, path;
+@dynamic sampleRate, sampleFormat, bytesPerSample, duration, isPaused, isPlaying, isStream, position;
 
 -(id)initWithSoundSource:(FISoundSource*)other
 {
   if ([other isStream]) {
-    self = [self initWithPath:other.stream.path enableStreaming:YES error:NULL];
+    self = [self initWithPath:[other path] enableStreaming:YES error:NULL];
     _pitch = other.pitch;
     _gain = other.gain;
+    path = other.path;
     return self;
   }
 
@@ -38,15 +40,15 @@
     return nil;
   }
 
-  _stream = [[FISoundEngine sharedEngine] createStreamWithPath:other.stream.path
+  stream = [[FISoundEngine sharedEngine] createStreamWithPath:[other path]
                                                          error:nil];
-  if (!_stream) {
+  if (!stream) {
     return nil;
   }
-  [_stream close];
-
+  [stream close];
   _pitch = other.pitch;
   _gain = other.gain;
+  path = other.path;
   _buffers = [NSMutableArray array];
 
   NSEnumerator *e = [other.buffers objectEnumerator];
@@ -67,12 +69,12 @@
   return [[FISoundSource alloc] initWithSoundSource:self];
 }
 
-+(id)sourceWithPath:(NSString*)path enableStreaming:(BOOL)streaming error:(NSError**)error
++(id)sourceWithPath:(NSString*)aPath enableStreaming:(BOOL)streaming error:(NSError**)error
 {
-  return [[FISoundSource alloc] initWithPath:path enableStreaming:streaming error:error];
+  return [[FISoundSource alloc] initWithPath:aPath enableStreaming:streaming error:error];
 }
 
--(id)initWithPath:(NSString*)path enableStreaming:(BOOL)streaming error:(NSError**)error
+-(id)initWithPath:(NSString*)aPath enableStreaming:(BOOL)streaming error:(NSError**)error
 {
   self = [super init];
   _pitch = 1;
@@ -88,12 +90,12 @@
     return nil;
   }
     
-  _stream = [[FISoundEngine sharedEngine] createStreamWithPath:path error:error];
-  if (!_stream) {
+  stream = [[FISoundEngine sharedEngine] createStreamWithPath:aPath error:error];
+  if (!stream) {
     return nil;
   }
 
-  UInt64 blockSize = [_stream dataSize];
+  UInt64 blockSize = [stream dataSize];
   UInt32 buffCount = 1;
   if (streaming) {
     buffCount = MAX_BUFFERS;
@@ -101,9 +103,9 @@
   }
 
   for (int i = 0; i < buffCount; ++i) {
-    FISampleBuffer* buffer = [[FISampleBuffer alloc] initWithData:[_stream readData:blockSize]
-                                                       sampleRate:[_stream sampleRate]
-                                                     sampleFormat:[_stream sampleFormat]
+    FISampleBuffer* buffer = [[FISampleBuffer alloc] initWithData:[stream readData:blockSize]
+                                                       sampleRate:[stream sampleRate]
+                                                     sampleFormat:[stream sampleFormat]
                                                             error:error];
     if (!buffer) {
       return nil;
@@ -112,7 +114,7 @@
     [_buffers addObject:buffer];
     if (!streaming) {
       alSourcei(_handle, AL_BUFFER, [buffer handle]);
-      [_stream close];
+      [stream close];
     }
     else {
       if (![self queueBuffer:buffer error:error])
@@ -123,6 +125,7 @@
     if (streaming && [buffer size] < blockSize)
       break;
   }
+  path = aPath;
   [self setPosition:[FIVector vector]];
   return self;
 }
@@ -179,7 +182,7 @@
       return;
     }
     
-    NSData* data = [_stream readData:READ_BUFFER_SIZE];
+    NSData* data = [stream readData:READ_BUFFER_SIZE];
     if (!data) {
       NSLog(@"OpenAL: Can't read data to buffer.");
       return;
@@ -189,8 +192,8 @@
     if ([data length] == 0) {
       if ([self loop]) {
         // If looping enabled we need to read buffer from begining
-        [_stream rewind];
-        data = [_stream readData:READ_BUFFER_SIZE];
+        [stream rewind];
+        data = [stream readData:READ_BUFFER_SIZE];
         if (!data) {
           return;
         }
@@ -292,22 +295,22 @@
 
 -(NSUInteger)sampleRate
 {
-  return [_stream sampleRate];
+  return [stream sampleRate];
 }
 
 -(FISampleFormat)sampleFormat
 {
-  return [_stream sampleFormat];
+  return [stream sampleFormat];
 }
 
 -(NSUInteger)bytesPerSample
 {
-  return [_stream bytesPerSample];
+  return [stream bytesPerSample];
 }
 
 -(NSTimeInterval)duration
 {
-  return [_stream duration];
+  return [stream duration];
 }
 
 -(FIVector*)position
@@ -322,11 +325,6 @@
 -(void)setPosition:(FIVector *)position
 {
   alSource3f(_handle, AL_POSITION, position.x, position.y, position.z);
-}
-
--(NSString*)path
-{
-  return [_stream path];
 }
 
 @end

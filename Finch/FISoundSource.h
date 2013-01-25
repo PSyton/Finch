@@ -12,7 +12,7 @@
 @property(assign, nonatomic) float gain;
 @property(assign, nonatomic) float pitch;
 @property(copy, nonatomic) FIVector* position;
-@property(strong, readonly) NSString* path;
+@property(strong, retain, readonly) NSString* path;
 
 
 @property(assign, readonly) NSUInteger sampleRate;

@@ -158,6 +158,20 @@
   STAssertNotNil(sound, @"Load a 16-bit stereo sound %@", error);
   FISound* sound1 = [sound copy];
   STAssertNotNil(sound1, @"Can't copy sound");
+  STAssertEquals([sound path], [sound1 path], @"Path not equals after clone");
+}
+
+-(void)testStreamCreation
+{
+  NSError *error = nil;
+  FISound* sound = nil;
+  NSString* path = [[self soundBundle] pathForResource:@"stereo16bit" ofType:@"m4a"];
+  STAssertNoThrow(sound = [FISound soundWithPath:path
+                                 enableStreaming:YES
+                                           error:&error],
+                  @"Don't throw when trying to load a simple sound from a valid path");
+  STAssertNotNil(sound, @"Load a 16-bit stereo sound %@", error);
+  STAssertEquals([sound path], path, @"Path not equals");
 }
 
 @end

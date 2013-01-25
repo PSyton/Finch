@@ -24,7 +24,6 @@
 @property(assign, readonly) NSTimeInterval duration;
 
 @property(assign, readonly) UInt64 dataSize;
-@property(strong, readonly) NSString* path;
 
 @required
 +(AudioStreamBasicDescription)internalAudioInfoWithSampleRate:(Float64)sampleRate withChannels:(UInt32)chanels;
