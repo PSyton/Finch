@@ -1,7 +1,8 @@
 #import "FIError.h"
 
-NSString *const FIErrorDomain = @"FIErrorDomain";
-NSString *const FIOpenALErrorCodeKey = @"FIOpenALErrorCodeKey";
+NSString* const FIErrorDomain = @"FIErrorDomain";
+NSString* const FIOpenALErrorCodeKey = @"FIOpenALErrorCodeKey";
+NSString* const FIOpenALErrorDescriptionKey = @"FIOpenALErrorDescriptionKey";
 
 @implementation FIError
 
@@ -22,10 +23,13 @@ NSString *const FIOpenALErrorCodeKey = @"FIOpenALErrorCodeKey";
   if (AL_NO_ERROR != status)
   {
     if (error) {
+      NSString* errorDesc = [NSString stringWithCString:alGetString(status)
+                                               encoding:NSWindowsCP1251StringEncoding];
       *error = [NSError errorWithDomain:FIErrorDomain
                                    code:errorCode
-                               userInfo:@{NSLocalizedDescriptionKey : message,
-                  FIOpenALErrorCodeKey : @(status)}];
+                               userInfo:@{NSLocalizedDescriptionKey: message,
+                                               FIOpenALErrorCodeKey: @(status),
+                                        FIOpenALErrorDescriptionKey: errorDesc}];
     }
     return YES;
   }

@@ -4,17 +4,18 @@ extern NSString *const FIErrorDomain;
 extern NSString *const FIOpenALErrorCodeKey;
 
 enum {
-    FIErrorNone,
-    FIErrorCannotCreateContext,
-    FIErrorNoActiveContext,
-    FIErrorCannotCreateBuffer,
-    FIErrorCannotUploadData,
-    FIErrorCannotReadFile,
-    FIErrorInvalidSampleFormat,
-    FIErrorCannotAllocateMemory,
-    FIErrorCannotCreateSoundSource,
-    FIErrorFormatNotSupported,
-    FIUnknowError
+  FIErrorNone,
+  FIErrorCannotCreateContext,
+  FIErrorNoActiveContext,
+  FIErrorCannotCreateBuffer,
+  FIErrorCannotUploadData,
+  FIErrorCannotReadFile,
+  FIErrorInvalidSampleFormat,
+  FIErrorCannotAllocateMemory,
+  FIErrorCannotCreateSoundSource,
+  FIErrorFormatNotSupported,
+  FIErrorStreaming,
+  FIUnknowError
 };
 
 @interface FIError : NSObject

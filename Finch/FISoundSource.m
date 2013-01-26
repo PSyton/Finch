@@ -138,7 +138,7 @@
 
   // \fixme Change Error code for this...
   if ([FIError alErrorWithMessage:@"Failed to queue buffer to OpenAl source"
-                            withCode:FIErrorCannotCreateBuffer
+                            withCode:FIErrorStreaming
                            withError:error]) {
     return NO;
   }
@@ -164,27 +164,47 @@
   }
 
   int processed = 0;
-  ALuint bufID;
+  ALuint bufID = 0;
+  NSError* error = nil;
 
+  alGetError();
   // Get count of processed buffers
   alGetSourcei(_handle, AL_BUFFERS_PROCESSED, &processed);
+  if ([FIError alErrorWithMessage:@"Failed to get processed buffers"
+                                withCode:FIErrorStreaming
+                               withError:&error]) {
+
+#ifdef DEBUG
+    NSLog(@"processed: %d, %@", processed, [error description]);
+#endif
+    return;
+  }
 
   while (processed--) {
+    alGetError();
     alSourceUnqueueBuffers(_handle, 1, &bufID);
-    if (alGetError() != AL_NO_ERROR) {
-      NSLog(@"Error unqueue");
+    if ([FIError alErrorWithMessage:@"Failed to unqueue buffer from OpenAl source"
+                           withCode:FIErrorStreaming
+                          withError:&error]) {
+#ifdef DEBUG
+      NSLog(@"%@", [error description]);
+#endif
       return;
     }
 
     FISampleBuffer* buffer = [self findBuffer:bufID];
     if (!buffer) {
+#ifdef DEBUG
       NSLog(@"OpenAL: Buffer with this id not found.");
+#endif
       return;
     }
     
     NSData* data = [stream readData:READ_BUFFER_SIZE];
     if (!data) {
+#ifdef DEBUG
       NSLog(@"OpenAL: Can't read data to buffer.");
+#endif
       return;
     }
     
@@ -202,13 +222,17 @@
         break;
       }
     }
-    if ([buffer setData:data withError:nil] == 0) {
-      NSLog(@"OpenAL: Can't fill buffer.");
+    if ([buffer setData:data withError:&error] == 0) {
+#ifdef DEBUG
+      NSLog(@"%@", [error description]);
+#endif
       return;
     }
 
-    if (![self queueBuffer:buffer error:nil]) {
-      NSLog(@"OpenAL: Can't queue buffer.");
+    if (![self queueBuffer:buffer error:&error]) {
+#ifdef DEBUG
+      NSLog(@"%@", [error description]);
+#endif
       return;
     }
   }
