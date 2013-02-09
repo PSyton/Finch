@@ -12,7 +12,7 @@
 
 @implementation FISound
 @synthesize source;
-@dynamic isPlaying, loop, gain, pitch, duration, path;
+@dynamic isPlaying, loop, gain, pitch, duration, path, position;
 
 -(id)initWithSound:(FISound*)sound
 {
