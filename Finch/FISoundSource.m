@@ -7,7 +7,7 @@
 
 // For default we user 512K buffer
 #define READ_BUFFER_SIZE 512 * 1024
-#define MAX_BUFFERS 4
+#define MAX_BUFFERS 5
 
 @interface FISoundSource ()
 @property(assign) ALuint handle;
@@ -40,12 +40,7 @@
     return nil;
   }
 
-  stream = [[FISoundEngine sharedEngine] createStreamWithPath:[other path]
-                                                         error:nil];
-  if (!stream) {
-    return nil;
-  }
-  [stream close];
+  stream = [other stream];
   _pitch = other.pitch;
   _gain = other.gain;
   path = other.path;
