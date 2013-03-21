@@ -11,7 +11,7 @@
 
 @interface FISoundSource ()
 @property(assign) ALuint handle;
-@property(strong) NSMutableArray* buffers;
+@property(strong, retain) NSMutableArray* buffers;
 @property(strong, retain) id<FIStreamProtocol> stream;
 @property(strong, retain) NSString* path;
 @end
