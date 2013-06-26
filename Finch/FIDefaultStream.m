@@ -123,11 +123,13 @@
   UInt64 readBytes = 0;
   OSStatus errcode = noErr;
 
+  if (readSize == 0) // end of file.
+    return [NSData data];
+
   void *data = malloc(readSize);
 
   if (_extFileRef) {
     // Decode data
-
     AudioBufferList theDataBuffer;
     theDataBuffer.mNumberBuffers = 1;
     theDataBuffer.mBuffers[0].mDataByteSize = readSize;
