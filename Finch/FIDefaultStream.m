@@ -108,7 +108,7 @@
   _sampleFormat = FISampleFormatMake(_outFormat.mChannelsPerFrame, _outFormat.mBitsPerChannel);
   _bytesPerSample = [FIStream calculateBytesPerSample:_sampleFormat];
   
-  _numberOfSamples = _dataSize / _bytesPerSample;
+  _numberOfSamples = (UInt32)_dataSize / (UInt32)_bytesPerSample;
   _duration = _numberOfSamples / _sampleRate;
   return self;
 }
@@ -126,13 +126,13 @@
   if (readSize == 0) // end of file.
     return [NSData data];
 
-  void *data = malloc(readSize);
+  void *data = malloc((UInt32)readSize);
 
   if (_extFileRef) {
     // Decode data
     AudioBufferList theDataBuffer;
     theDataBuffer.mNumberBuffers = 1;
-    theDataBuffer.mBuffers[0].mDataByteSize = readSize;
+    theDataBuffer.mBuffers[0].mDataByteSize = (UInt32)readSize;
     theDataBuffer.mBuffers[0].mNumberChannels = _outFormat.mChannelsPerFrame;
     theDataBuffer.mBuffers[0].mData = data;
 
@@ -160,7 +160,7 @@
     return [NSData data];
   }
   _bytesRead += readSize;
-  return [NSData dataWithBytesNoCopy:data length:readSize freeWhenDone:YES];
+  return [NSData dataWithBytesNoCopy:data length:(UInt32)readSize freeWhenDone:YES];
 }
 
 -(void)close
