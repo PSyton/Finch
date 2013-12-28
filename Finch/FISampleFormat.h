@@ -1,3 +1,5 @@
+#import <Foundation/Foundation.h>
+
 typedef enum {
     FISampleFormatMono8,
     FISampleFormatMono16,
