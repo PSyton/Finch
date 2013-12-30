@@ -36,10 +36,14 @@
 
 -(BOOL)isEqual:(id)object
 {
-  return [object isKindOfClass:[self class]]
-    && ([object x] == x
-        && [object y] == y
-        && [object z] == z);
+  if ([object isKindOfClass:[self class]])
+  {
+    FIVector* other = (FIVector*)object;
+    return ([other x] == x
+            && [other y] == y
+            && [other z] == z);
+  }
+  return false;
 }
 
 -(NSString*)description
